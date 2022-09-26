@@ -8,11 +8,11 @@ web:
   volumes:
     - .:/data
   ports:
-    - "5000:5000"
+    - "5008:5008"
 
 db:
   image: mysql:5.7
   environment:
       MYSQL_ROOT_PASSWORD: mudar123
   ports:
-    - "3309:3309"
+    - "3306:3306"
