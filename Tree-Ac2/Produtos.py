@@ -5,15 +5,10 @@ from flaskext.mysql import MySQL
 mysql = MySQL()
 app = Flask(__name__)
 
-# Configurações para o MySQL
-# define o nome do user
+# MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
-# define a senha
-app.config['MYSQL_DATABASE_PASSWORD'] = 'mudar123'
-# define o nome do DB
-app.config['MYSQL_DATABASE_DB'] = 'Products'
-# caso usando o docker, o ip precisar ser o da imagem do MySQL
-# docker network inspect bridge
+app.config['MYSQL_DATABASE_PASSWORD'] = 'admin'
+app.config['MYSQL_DATABASE_DB'] = 'teste'
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 mysql.init_app(app)
 
@@ -21,15 +16,15 @@ mysql.init_app(app)
 def main():
     return render_template('index.html')
 
-@app.route('/gravarProduto', methods=['POST','GET'])
-def gravarAluno():
+@app.route('/gravar', methods=['POST','GET'])
+def gravar():
   nome = request.form['nome']
   preco = request.form['preco']
   categoria = request.form['categoria']
   if nome and preco and categoria:
     conn = mysql.connect()
     cursor = conn.cursor()
-    cursor.execute('insert into tbl_products (product_name, product_price, product_category) VALUES (%s, %s, %s)', (nome, preco, categoria))
+    cursor.execute('insert into tbl_produto (produto_nome, produto_preco, produto_categoria) VALUES (%s, %s, %s)', (nome, preco, categoria))
     conn.commit()
   return render_template('index.html')
 
@@ -38,7 +33,7 @@ def gravarAluno():
 def listar():
   conn = mysql.connect()
   cursor = conn.cursor()
-  cursor.execute('select product_name, product_price, product_category from tbl_products')
+  cursor.execute('select produto_nome, produto_preco, produto_categoria from tbl_produto')
   data = cursor.fetchall()
   conn.commit()
   return render_template('lista.html', datas=data)
